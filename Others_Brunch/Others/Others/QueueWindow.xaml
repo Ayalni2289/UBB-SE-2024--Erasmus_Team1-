@@ -1,0 +1,43 @@
+﻿<Window x:Class="Others.QueueWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Now Playing" Height="550" Width="643" Background="#FF2D2D30">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Now Playing Title -->
+        <TextBlock Text="Now Playing" FontSize="32" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,20"/>
+
+        <!-- Currently playing song detail -->
+        <TextBlock x:Name="NowPlayingTextBlock" Grid.Row="1" Text="{Binding CurrentSongDisplay}" FontSize="16" Foreground="#DDDDDD" HorizontalAlignment="Center" Margin="0,10"/>
+
+        <!-- Up Next Title -->
+        <TextBlock Grid.Row="2" Text="Up Next" FontSize="24" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,30,0,10"/>
+
+        <!-- Queue List -->
+        <ListBox x:Name="QueueListBox" Grid.Row="2" Margin="0,0,0,20" BorderBrush="Transparent">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="#606060" BorderThickness="0,0,0,1" Padding="10">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                            <TextBlock Text="{Binding Title}" Foreground="White" FontSize="16" Margin="0,0,10,0" MouseDown="TextBlock_MouseDown"/>
+                            <TextBlock Text="-" Foreground="White" FontSize="16" Margin="0,0,10,0"/>
+                            <TextBlock Text="{Binding Artist}" Foreground="White" FontSize="16" Margin="0,0,20,0"/>
+                            <Button Content="Play" Background="#FF1DB954" Foreground="White" FontSize="14" Padding="10" Margin="10,0,10,0" Click="PlayButton_Click" Tag="{Binding}"/>
+                            <Button Content="Remove" Background="#FF4C4C" Foreground="White" FontSize="14" Padding="10" Margin="10,0,10,0" Click="RemoveButton_Click" Tag="{Binding}"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Window>
+
+
+
+
+
