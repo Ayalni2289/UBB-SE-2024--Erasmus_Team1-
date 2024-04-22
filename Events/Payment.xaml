@@ -1,0 +1,35 @@
+﻿<Window x:Class="Events.Payment"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Payment" Height="400" Width="600">
+    <Grid Background="#121212">
+        <Border Padding="20" Background="#191414" CornerRadius="10" 
+                HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel>
+                <TextBlock Text="Complete Your Purchase" Foreground="#9f61e2" FontSize="24" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="eventLocationDateTextBlock" Foreground="#9f61e2" FontSize="16" Margin="0,0,0,20" HorizontalAlignment="Center"/>
+                <StackPanel Margin="0,10">
+                    <Label Content="Cardholder's Name" Foreground="White"/>
+                    <TextBox x:Name="cardholderNameTextBox" Background="#333" Foreground="White" Padding="10" Margin="0,0,0,20" BorderThickness="0"/>
+                    <Label Content="Card Number" Foreground="White"/>
+                    <TextBox x:Name="cardNumberTextBox" Background="#333" Foreground="White" Padding="10" Margin="0,0,0,20" BorderThickness="0"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                        <StackPanel>
+                            <Label Content="Expiry Date" Foreground="White"/>
+                            <TextBox x:Name="expiryDateTextBox" Background="#333" Foreground="White" Padding="10" BorderThickness="0"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <Label Content="CVV" Foreground="White"/>
+                            <TextBox x:Name="cvvTextBox" Background="#333" Foreground="White" Padding="10" BorderThickness="0"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <Button x:Name="confirmPurchaseButton" Content="Confirm Purchase" Background="#1DB954" Foreground="White" Padding="15,10" BorderThickness="0" Cursor="Hand" Click="ConfirmPurchaseButton_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
+
+
+
+
