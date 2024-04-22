@@ -1,0 +1,28 @@
+﻿<Window x:Class="PLAYLIST.AddPlaylistWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Add Playlist" Height="300" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Playlist Name:" Margin="5"/>
+        <TextBox x:Name="txtPlaylistName" Grid.Row="1" Margin="5"/>
+
+        <TextBlock Text="Description:" Grid.Row="2" Margin="5"/>
+        <TextBox x:Name="txtDescription" Grid.Row="3" Margin="5" Height="100"/>
+
+        <!-- 
+        Asumiendo que el OwnerID será manejado automáticamente o seleccionado de alguna forma 
+        (por ejemplo, un ComboBox con una lista de usuarios) y que la fecha de creación se manejará automáticamente al insertar la playlist en la base de datos.
+        -->
+
+        <Button Content="Add" Grid.Row="4" Margin="5" Click="AddButton_Click"/>
+    </Grid>
+</Window>
+
