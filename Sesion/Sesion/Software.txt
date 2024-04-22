@@ -1,0 +1,201 @@
+-- Users
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY IDENTITY(1,1),
+    Username VARCHAR(255) UNIQUE NOT NULL,
+    Email VARCHAR(255) NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    DateJoined DATETIME NOT NULL,
+    IsActive BIT NOT NULL
+);
+
+-- Artists
+CREATE TABLE Artists (
+    ArtistID INT PRIMARY KEY IDENTITY(1,1),
+    Name VARCHAR(255) NOT NULL,
+    Biography TEXT,
+    Genre VARCHAR(255) NOT NULL
+);
+
+-- Songs
+CREATE TABLE Songs (
+    SongID INT PRIMARY KEY IDENTITY(1,1),
+    Title VARCHAR(255) NOT NULL,
+    ArtistID INT FOREIGN KEY REFERENCES Artists(ArtistID),
+    AlbumID INT,
+    Genre VARCHAR(255) NOT NULL,
+    Duration TIME NOT NULL,
+    ReleaseDate DATETIME NOT NULL
+);
+
+-- Albums
+CREATE TABLE Albums (
+    AlbumID INT PRIMARY KEY IDENTITY(1,1),
+    ArtistID INT FOREIGN KEY REFERENCES Artists(ArtistID),
+    Title VARCHAR(255) NOT NULL,
+    ReleaseDate DATETIME NOT NULL,
+    CoverArt VARCHAR(255) NOT NULL
+);
+
+-- Playlists
+CREATE TABLE Playlists (
+    PlaylistID INT PRIMARY KEY IDENTITY(1,1),
+    OwnerID INT FOREIGN KEY REFERENCES Users(UserID),
+    Name VARCHAR(255) NOT NULL,
+    Description TEXT,
+    CreationDate DATETIME NOT NULL
+);
+
+-- PlaylistSongs
+CREATE TABLE PlaylistSongs (
+    PlaylistID INT,
+    SongID INT,
+    PRIMARY KEY (PlaylistID, SongID),
+    FOREIGN KEY (PlaylistID) REFERENCES Playlists(PlaylistID),
+    FOREIGN KEY (SongID) REFERENCES Songs(SongID)
+);
+
+-- Feedback
+CREATE TABLE Feedback (
+    FeedbackID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT FOREIGN KEY REFERENCES Users(UserID),
+    SongID INT FOREIGN KEY REFERENCES Songs(SongID),
+    Rating INT NOT NULL,
+    Comment TEXT,
+    DateAndTime DATETIME NOT NULL
+);
+
+-- Events
+CREATE TABLE Events (
+    EventID INT PRIMARY KEY IDENTITY(1,1),
+    ArtistID INT FOREIGN KEY REFERENCES Artists(ArtistID),
+    Name VARCHAR(255) NOT NULL,
+    Description TEXT,
+    Location VARCHAR(255) NOT NULL,
+    DateTime DATETIME NOT NULL,
+    TicketPrice DECIMAL(10, 2) NOT NULL
+);
+
+-- Tickets
+CREATE TABLE Tickets (
+    TicketID INT PRIMARY KEY IDENTITY(1,1),
+    EventID INT FOREIGN KEY REFERENCES Events(EventID),
+    UserID INT FOREIGN KEY REFERENCES Users(UserID),
+    PurchaseDate DATETIME NOT NULL,
+    Price DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE SongFiles (
+    FileID INT PRIMARY KEY IDENTITY(1,1),
+    SongID INT FOREIGN KEY REFERENCES Songs(SongID),
+    FilePath VARCHAR(255) NOT NULL 
+);
+
+CREATE TABLE SharedItems (
+    SharedItemID INT PRIMARY KEY IDENTITY(1,1),
+    ItemPath VARCHAR(255) NOT NULL,
+    SenderUserID INT FOREIGN KEY REFERENCES Users(UserID),
+    ReceiverUserID INT FOREIGN KEY REFERENCES Users(UserID),
+    DateShared DATETIME NOT NULL
+);
+
+-- OPERATIONS IN THE DATABASE
+-- USER
+-- Add a New User
+INSERT INTO Users (Username, Email, Password, DateJoined, IsActive) VALUES ('PabloAlvarez', 'pablo.alvarez@gmail.com', 'SoftwareProject', GETDATE(), 1);
+
+-- Update User Email
+UPDATE Users SET Email = 'pablo.arnedo@gmail.com' WHERE Username = 'PabloAlvarez';
+
+-- Select All Active Users
+SELECT * FROM Users WHERE IsActive = 1;
+
+-- Deactivate a User
+UPDATE Users SET IsActive = 0 WHERE Username = 'PabloAlvarez';
+
+-- Delete a User
+-- DELETE FROM Users WHERE Username = 'PabloAlvarez'; 
+
+
+-- ARTIST
+-- Add a New Artist
+INSERT INTO Artists (Name, Biography, Genre) VALUES ('AC/DC', 'AC/DC are an Australian rock band formed in 1973.', 'Rock');
+
+-- Update Artist Biography
+UPDATE Artists SET Biography = 'AC/DC are an Australian rock band formed in 1973. They were founded by brothers Malcolm Young on rhythm guitar and Angus Young on lead guitar.' WHERE Name = 'AC/DC';
+
+-- Select All Artists of a Specific Genre
+SELECT * FROM Artists WHERE Genre = 'Rock';
+
+-- List All Artists
+SELECT * FROM Artists;
+
+-- Delete an Artist
+--DELETE FROM Artists WHERE Name = 'AC/DC'; 
+
+
+-- SONG
+-- Add a New Song
+INSERT INTO Songs (Title, ArtistID, AlbumID, Genre, Duration, ReleaseDate) VALUES ('Back in Black', 1, 1, 'Rock', '00:04:13', CONVERT(DATETIME, '1980-07-25 12:00:00', 120));
+
+-- Update Song Genre
+UPDATE Songs SET Genre = 'Hard Rock' WHERE Title = 'Back in Black';
+
+-- Select All Songs Longer Than 4 Minutes
+SELECT * FROM Songs WHERE Duration > '00:04:00';
+
+-- List Songs by a Specific Artist
+SELECT * FROM Songs WHERE ArtistID = (SELECT ArtistID FROM Artists WHERE Name = 'AC/DC');
+
+-- Delete a Song
+--DELETE FROM Songs WHERE Title = 'Back in Black'
+
+
+-- PLAYLIST
+-- Create a New Playlist
+INSERT INTO Playlists (OwnerID, Name, Description, CreationDate) VALUES (1, 'Best Music Ever', 'Here is a playlist with the best songs ever made', GETDATE());
+
+-- Add a Song to a Playlist
+INSERT INTO PlaylistSongs (PlaylistID, SongID) VALUES (1, 3);
+
+-- Rename a Playlist
+UPDATE Playlists SET Name = 'Favourite Songs' WHERE Name = 'Best Music Ever';
+
+-- Select All Playlists Created by a User
+SELECT * FROM Playlists WHERE OwnerID = 1;
+
+-- Remove a Song from a Playlist
+-- DELETE FROM PlaylistSongs WHERE PlaylistID = 1 AND SongID = 1; 
+
+
+-- FEEDBACK
+-- Leave Feedback for a Song
+INSERT INTO Feedback (UserID, SongID, Rating, Comment, DateAndTime) VALUES (1, 3, 5, 'Awesome track!', GETDATE());
+
+-- Update Feedback Comment
+UPDATE Feedback SET Comment = 'Even better after a few listens.' WHERE FeedbackID = 1;
+
+-- Select All Feedback for a Song
+SELECT * FROM Feedback WHERE SongID = 3;
+
+-- Select Top Rated Songs
+SELECT SongID, AVG(Rating) AS AverageRating FROM Feedback GROUP BY SongID HAVING AVG(Rating) > 4;
+
+-- Delete Feedback
+-- DELETE FROM Feedback WHERE FeedbackID = 1;
+
+
+-- EVENT
+-- Create a New Event
+INSERT INTO Events (ArtistID, Name, Description, Location, DateTime, TicketPrice) VALUES (1, 'Power up 2024 Tour', 'Get ready to rock and roll', 'Amsterdam Arena (Amsterdam)', '2024-06-5 19:00:00', 169.99);
+
+-- Update Event Ticket Price
+UPDATE Events SET TicketPrice = 179.99 WHERE Name = 'Power up 2024 Tour';
+
+-- Select Upcoming Events
+SELECT * FROM Events WHERE DateTime > GETDATE();
+
+-- List Events for a Specific Artist
+SELECT * FROM Events WHERE ArtistID = (SELECT ArtistID FROM Artists WHERE Name = 'AC/DC');
+
+-- Delete an Event
+-- DELETE FROM Events WHERE Name = 'Power up 2024 Tour';
